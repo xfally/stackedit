@@ -91,6 +91,86 @@ define([
 		}
 	};
 
+	// Change outer css to inner one
+	publisher.cssOuter2Inner = function(outer) {
+		return outer.replace(/</g, "&lt;").replace(/>/g, "&gt;")
+		.replace(/&lt;link(\s+(type=\"text\/css\"|rel=\"stylesheet\"))+\s+href=\"(\S+)\"(\s+.*|\s*)\/?&gt;/gi, function (s, t1, t2, t3) {
+			t3 = t3.replace(/https?:\/\/(stackedit\.io|localhost|127\.0\.0\.1)(:\d+)?\//gi, "");
+			if(!t3) {return "";}
+			var inner = "//css not found!";
+			$.ajax({
+				type    : 'GET',
+				url     : t3,
+				async   : false,
+				dataType: 'text',
+				cache   : false,
+				success : function(r) {
+					inner = [
+						'<style type="text/css">',
+						r,
+						'</style>'
+					].join('\n');
+				}
+			});
+			return inner;
+		}).replace(/&lt;/g, "<").replace(/&gt;/g, ">");
+	};
+
+	// Change outer javascript to inner one
+	publisher.jsOuter2Inner = function(outer) {
+		return outer.replace(/</g, "&lt;").replace(/>/g, "&gt;")
+		.replace(/&lt;script(\s+(type=\"text\/javascript\"))?.*\s+src=\"(\S+)\"(\s+.*|\s*)\/?&gt;\s*&lt;\/script&gt;/gi, function(s, t1, t2, t3) {
+			t3 = t3.replace(/https?:\/\/(stackedit\.io|localhost|127\.0\.0\.1)(:\d+)?\//gi, "").replace(/.*mathjax.*/gi, "");
+			if(!t3) {return "";}
+			var inner = "//js not found!";
+			$.ajax({
+				type    : 'GET',
+				url     : t3,
+				async   : false,
+				dataType: 'text',
+				cache   : false,
+				success : function(r) {
+					inner = [
+						'<script type="text/javascript">',
+						r,
+						'</script>'
+					].join('\n');
+				}
+			});
+			return inner;
+		}).replace(/&lt;/g, "<").replace(/&gt;/g, ">");
+	};
+
+	// Change outer image to inner one
+	publisher.imageOuter2Inner = function(outer) {
+		return outer.replace(/</g, "&lt;").replace(/>/g, "&gt;")
+		.replace(/&lt;img\s+(.*)src=\"(\S+)\"(\s+.*|\s*)\/?&gt;/gi, function (s, t1, t2, t3) {
+			t2 = t2.replace(/https?:\/\/(stackedit\.io|localhost|127\.0\.0\.1)(:\d+)?\//gi, "").replace(/https?:\/\/(\S+\.)*monetizejs\.com\//gi, "");
+			if(!t1) {t1 = "";}
+			if(!t2) {return "";}
+			if(!t3) {t3 = "";}
+			var inner = "//image not found!";
+			// WARNING: Don't support cross origin image, now
+			var img = $('img[src="'+t2+'"]')[0];
+			if(img) {
+				var canvas = document.createElement('CANVAS');
+				var ctx = canvas.getContext('2d');
+				var dataURL;
+				canvas.height = img.height;
+				canvas.width = img.width;
+				ctx.drawImage(img, 0, 0);
+				dataURL = canvas.toDataURL();
+				canvas = null; 
+				inner = [
+					'<img ' + t1,
+					'src="' + dataURL + '"',
+					t3 + '>'
+				].join(' ');
+			}
+			return inner;
+		}).replace(/&lt;/g, "<").replace(/&gt;/g, ">");
+	};
+
 	// Used to get content to publish
 	function getPublishContent(fileDesc, publishAttributes, html) {
 		if(publishAttributes.format === undefined) {
@@ -330,6 +410,14 @@ define([
 		$(".action-download-template").click(function() {
 			var fileDesc = fileMgr.currentFile;
 			var content = publisher.applyTemplate(fileDesc, undefined, currentHTML);
+			utils.saveAs(content, fileDesc.title + (settings.template.indexOf("documentHTML") === -1 ? ".md" : ".html"));
+		});
+		$(".action-download-template-offline").click(function() {
+			var fileDesc = fileMgr.currentFile;
+			var content = publisher.applyTemplate(fileDesc, undefined, currentHTML);
+			content = publisher.cssOuter2Inner(content);
+			content = publisher.jsOuter2Inner(content);
+			content = publisher.imageOuter2Inner(content);
 			utils.saveAs(content, fileDesc.title + (settings.template.indexOf("documentHTML") === -1 ? ".md" : ".html"));
 		});
 		var monetize = new MonetizeJS({
