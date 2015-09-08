@@ -473,6 +473,38 @@ define([
 			});
 			task.enqueue();
 		});
+		$(".action-download-pdf-offline").click(function() {
+			var fileDesc = fileMgr.currentFile;
+			var content = publisher.applyTemplate(fileDesc, {
+				customTmpl: settings.pdfTemplateOffline
+			}, currentHTML);
+			var task = new AsyncTask();
+			var pdf;
+			task.onRun(function() {
+				var xhr = new XMLHttpRequest();
+				xhr.open('POST', constants.PDF_EXPORT_OFFLINE_URL + '?' + $.param({
+					options: settings.pdfOptions
+				}), true);
+				xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+				xhr.responseType = 'blob';
+				xhr.onreadystatechange = function() {
+					if(this.readyState == 4) {
+						if(this.status == 200) {
+							pdf = this.response;
+						}
+						else {
+							eventMgr.onError("Error when trying to generate PDF: " + this.statusText);
+						}
+						task.chain();
+					}
+				};
+				xhr.send(content);
+			});
+			task.onSuccess(function() {
+				pdf && utils.saveAs(pdf, fileMgr.currentFile.title + ".pdf");
+			});
+			task.enqueue();
+		});
 	});
 
 	eventMgr.onPublisherCreated(publisher);

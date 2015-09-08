@@ -48,6 +48,21 @@ define([
 			'<body><%= documentHTML %></body>',
 			'</html>'
 		].join('\n'),
+		pdfTemplateOffline: [
+			'<!DOCTYPE html>',
+			'<html>',
+			'<head>',
+			'<meta charset="utf-8">',
+			'<title><%= documentTitle %></title>',
+			'<link rel="stylesheet" href="http://localhost/res-min/themes/base.css" />',
+			'<script type="text/x-mathjax-config">',
+			'MathJax.Hub.Config({ messageStyle: "none" });',
+			'</script>',
+			'<script type="text/javascript" src="http://localhost/res/bower-libs/MathJax/MathJax.js?config=TeX-AMS_HTML"></script>',
+			'</head>',
+			'<body><%= documentHTML %></body>',
+			'</html>'
+		].join('\n'),
 		pdfOptions: [
 			'{',
 			'    "marginTop": 25,',

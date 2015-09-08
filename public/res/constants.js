@@ -28,6 +28,7 @@ define([], function() {
 	constants.PICASA_IMPORT_IMG_URL = "/picasaImportImg";
 	constants.SSH_PUBLISH_URL = '/sshPublish';
 	constants.PDF_EXPORT_URL = "/pdfExport";
+	constants.PDF_EXPORT_OFFLINE_URL = "/pdfExportOffline";
 	constants.COUCHDB_URL = 'https://stackedit.smileupps.com/documents';
 
 	// Site dependent
