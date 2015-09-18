@@ -30,7 +30,7 @@ define([
 		var editorLinkListHtml = _.reduce(fileDesc.syncLocations, function(result, attributes) {
 			var params = sharing.getEditorParams(attributes);
 			if(params) {
-				var link = constants.MAIN_URL + 'editor#!' + $.param(params);
+				var link = constants.BASE_URL + 'editor#!' + $.param(params);
 				result += _.template(dialogManageSharingLocationHTML, {
 					link: link
 				});
@@ -43,7 +43,7 @@ define([
 		var viewerLinkListHtml = _.reduce(fileDesc.publishLocations, function(result, attributes) {
 			var params = sharing.getViewerParams(attributes);
 			if(params) {
-				var link = constants.MAIN_URL + 'viewer#!' + $.param(params);
+				var link = constants.BASE_URL + 'viewer#!' + $.param(params);
 				result += _.template(dialogManageSharingLocationHTML, {
 					link: link
 				});

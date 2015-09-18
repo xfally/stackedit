@@ -95,7 +95,6 @@ define([
 	publisher.cssOuter2Inner = function(outer) {
 		return outer.replace(/</g, "&lt;").replace(/>/g, "&gt;")
 		.replace(/&lt;link(\s+(type=\"text\/css\"|rel=\"stylesheet\"))+\s+href=\"(\S+)\"(\s+.*|\s*)\/?&gt;/gi, function (s, t1, t2, t3) {
-			t3 = t3.replace(/https?:\/\/(stackedit\.io|localhost|127\.0\.0\.1)(:\d+)?\//gi, "");
 			if(!t3) {return "";}
 			var inner = "//css not found!";
 			$.ajax({
@@ -120,7 +119,6 @@ define([
 	publisher.jsOuter2Inner = function(outer) {
 		return outer.replace(/</g, "&lt;").replace(/>/g, "&gt;")
 		.replace(/&lt;script(\s+(type=\"text\/javascript\"))?.*\s+src=\"(\S+)\"(\s+.*|\s*)\/?&gt;\s*&lt;\/script&gt;/gi, function(s, t1, t2, t3) {
-			t3 = t3.replace(/https?:\/\/(stackedit\.io|localhost|127\.0\.0\.1)(:\d+)?\//gi, "").replace(/.*mathjax.*/gi, "");
 			if(!t3) {return "";}
 			var inner = "//js not found!";
 			$.ajax({
@@ -145,7 +143,6 @@ define([
 	publisher.imageOuter2Inner = function(outer) {
 		return outer.replace(/</g, "&lt;").replace(/>/g, "&gt;")
 		.replace(/&lt;img\s+(.*)src=\"(\S+)\"(\s+.*|\s*)\/?&gt;/gi, function (s, t1, t2, t3) {
-			t2 = t2.replace(/https?:\/\/(stackedit\.io|localhost|127\.0\.0\.1)(:\d+)?\//gi, "").replace(/https?:\/\/(\S+\.)*monetizejs\.com\//gi, "");
 			if(!t1) {t1 = "";}
 			if(!t2) {return "";}
 			if(!t3) {t3 = "";}
