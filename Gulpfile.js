@@ -207,6 +207,12 @@ gulp.task('cache-manifest', function() {
 		.pipe(gulp.dest('./public/'));
 });
 
+gulp.task('cache-manifest-date', function() {
+	return gulp.src('./public/cache.manifest')
+		.pipe(replace(/(#Date ).*/, '$1' + Date()))
+		.pipe(gulp.dest('./public/'));
+});
+
 gulp.task('clean', [
 	'clean-requirejs',
 	'clean-less',
