@@ -5,6 +5,7 @@
   "dependencies": {
     "bootstrap": "3.0.3",
     "jquery": "2.0.3",
+    "jquery-form": "~3.46.0",
     "underscore": "1.5.1",
     "requirejs": "~2.1.11",
     "require-css": "0.1.5",

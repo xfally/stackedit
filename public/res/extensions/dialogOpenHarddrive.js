@@ -1,11 +1,13 @@
 define([
     "jquery",
+    "jquery-form",
     "underscore",
     "constants",
     "utils",
     "classes/Extension",
     "toMarkdown",
-], function($, _, constants, utils, Extension, toMarkdown) {
+], function($, jqueryForm, _, constants, utils, Extension, toMarkdown) {
+// juqeryForm is just a placeholder, not used at all.
 
     var dialogOpenHarddrive = new Extension("dialogOpenHarddrive", 'Dialog "Open from"');
 
@@ -31,6 +33,32 @@ define([
         $(".modal-import-harddrive-markdown, .modal-import-harddrive-html").modal("hide");
         _.each(files, function(file) {
             if($(evt.target).is("#wmd-input *") && file.name.match(/.(jpe?g|png|gif)$/i)) {
+                return;
+            }
+            if(file.name.match(/.(jpe?g|png|gif)$/i)) {
+                var options = {
+                    url: constants.IMAGE_UPLOAD_URL,
+                    type: "POST",
+                    dataType: "text/json",
+                    timeout: constants.AJAX_TIMEOUT,
+                    clearForm: true,
+                    resetForm: true,
+                    complete: function(res) {
+                        if (res.responseText) {
+                            var imageInfo = $.parseJSON(res.responseText);
+                            if (imageInfo) {
+                                $("#input-insert-image").val(constants.BASE_URL + imageInfo.image_path);
+                                var a;
+                                a = $("#input-file-upload-harddrive-image");
+                                eventMgr.onMessage(file.name + " upload succeeded.");
+                                return;
+                            }
+                        }
+                        eventMgr.onError(file.name + " upload failed!");
+                        return;
+                    }
+                };
+                $('#form-upload-harddrive-image').ajaxSubmit(options);
                 return;
             }
             var reader = new FileReader();
@@ -68,6 +96,11 @@ define([
         handleFileImport(evt);
     }
     
+    function handleImageUpload(evt) {
+        contentWrapper = undefined;
+        handleFileImport(evt);
+    }
+
     function handleDragOver(evt) {
         evt.stopPropagation();
         evt.preventDefault();
@@ -88,6 +121,7 @@ define([
             this.addEventListener('dragover', handleDragOver, false);
             this.addEventListener('drop', handleHtmlImport, false);
         });
+        $("#input-file-upload-harddrive-image").change(handleImageUpload);
         $(".action-convert-html").click(function(e) {
             var content = utils.getInputTextValue("#input-convert-html", e);
             if(content === undefined) {

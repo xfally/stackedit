@@ -29,6 +29,7 @@ define([], function() {
 	constants.SSH_PUBLISH_URL = '/sshPublish';
 	constants.PDF_EXPORT_URL = "/pdfExport";
 	constants.PDF_EXPORT_OFFLINE_URL = "/pdfExportOffline";
+	constants.IMAGE_UPLOAD_URL = "/imageUpload";
 	constants.COUCHDB_URL = 'https://stackedit.smileupps.com/documents';
 
 	// Site dependent

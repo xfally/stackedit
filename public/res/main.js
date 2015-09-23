@@ -16,6 +16,7 @@ requirejs.config({
 	],
 	paths: {
 		jquery: 'bower-libs/jquery/jquery',
+		'jquery-form': 'bower-libs/jquery-form/jquery.form',
 		underscore: 'bower-libs/underscore/underscore',
 		crel: 'bower-libs/crel/crel',
 		jgrowl: 'bower-libs/jgrowl/jquery.jgrowl',
@@ -125,6 +126,12 @@ requirejs.config({
 				'jquery'
 			],
 			exports: 'toMarkdown'
+		},
+		'jquery-form': {
+			deps: [
+				'jquery'
+			],
+			exports: 'jquery-form'
 		},
 		stacktrace: {
 			exports: 'printStackTrace'

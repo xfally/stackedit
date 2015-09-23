@@ -23,6 +23,7 @@ app.post('/pdfExport', require('./pdf').export);
 app.post('/pdfExportOffline', require('./pdf-offline').export);
 app.post('/sshPublish', require('./ssh').publish);
 app.post('/picasaImportImg', require('./picasa').importImg);
+app.post('/imageUpload', require('./upload').uploadImg);
 app.get('/downloadImport', require('./download').importPublic);
 
 // Serve static resources

@@ -310,11 +310,20 @@
 			</div>
 			<div class="modal-body">
 				<p>Please provide the image URL and an optional title:</p>
+				<p>
 				<div class="input-group">
 					<span class="input-group-addon"><i class="icon-picture"></i></span><input
 						id="input-insert-image" type="text" class="col-sm-5 form-control"
 						placeholder='http://example.com/image.jpg "optional title"' />
 				</div>
+				</p>
+				<p>Or select your image files here:</p>
+				<p>
+					<form id="form-upload-harddrive-image">
+					<input type="file" id="input-file-upload-harddrive-image" name="input_file_upload_harddrive_image"
+						multiple class="form-control" />
+					</form>
+				</p>
 			</div>
 			<div class="modal-footer">
 				<a href="#" class="btn btn-default pull-left action-import-image-gplus"
