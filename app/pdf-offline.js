@@ -111,7 +111,7 @@ exports.export = function(req, res, next) {
 		}
 		clearTimeout(timeoutId);
 		if(code) {
-			console.log("StackEdit: pdf-offline: spawn close ERROR: code=" + code + ", filePath=" + filePath + ", Ignored!");
+			//console.log("StackEdit: pdf-offline: spawn close ERROR: code=" + code + ", filePath=" + filePath + ", Ignored!");
 			return onUnknownError();
 		}
 		var readStream = fs.createReadStream(filePath);
